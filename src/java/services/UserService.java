@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import models.User;
+import models.Users;
 
 /**
  *
@@ -50,7 +50,7 @@ public class UserService
     }
    
         
-       public User get(String username) throws Exception {
+       public Users get(String username) throws Exception {
         
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -66,7 +66,7 @@ public class UserService
         
         ResultSet p1 = ps.executeQuery();
 
-          User u1 = new User(p1.getString("username"),p1.getString("password"),
+          Users u1 = new Users(p1.getString("username"),p1.getString("password"),
                   p1.getString("firstname"), p1.getString("lastname"),p1.getString("email"));
           
           connection.close();
@@ -75,14 +75,14 @@ public class UserService
      }
     
     public List getAll() throws Exception{
-        List<User> allUsers = new ArrayList();
+        List<Users> allUsers = new ArrayList();
         
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         Statement ps = connection.createStatement();
         ResultSet userList = ps.executeQuery("SELECT * FROM users");
         while(userList.next()){
-            allUsers.add(new User(userList.getString("username"),userList.getString("password"),
+            allUsers.add(new Users(userList.getString("username"),userList.getString("password"),
                     userList.getString("firstname"),userList.getString("lastname"),userList.getString("email")));
         }
         pool.freeConnection(connection);

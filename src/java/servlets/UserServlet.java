@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import services.UserService;
-import models.User;
+import models.Users;
 
 
 
@@ -33,7 +33,7 @@ public class UserServlet extends HttpServlet{
       // getting data from database using the UserService
       UserService userService = new UserService();
       try{
-      List<User> user = userService.getAll();   
+      List<Users> user = userService.getAll();   
       request.setAttribute("userList", user);  
       }
       catch (Exception e){
@@ -54,8 +54,8 @@ public class UserServlet extends HttpServlet{
     
        HttpSession session = request.getSession();
        UserService userService = new UserService();
-       List<User> userList;
-       User userData = (User) request.getAttribute("user");
+       List<Users> userList;
+       Users userData = (Users) request.getAttribute("user");
       
         if(action.equals("deleteItem")){
             
