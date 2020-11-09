@@ -7,6 +7,7 @@ package dataaccess;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import models.Users;
 
 /**
@@ -38,7 +39,50 @@ public class NotesDB {
      }
      
      public void insert(Users user )throws Exception{
-         
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        
+        try{
+          trans.begin();
+          em.persist(user);
+          trans.commit();
+        }catch(Exception ex){
+          trans.rollback();
+        }
+        finally{
+            em.close(); 
+        }
      }
+     public void update(Users user)throws Exception{
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        
+        try{
+          trans.begin();
+          em.merge(user);
+          trans.commit();
+        }catch(Exception ex){
+          trans.rollback();
+        }
+        finally{
+            em.close(); 
+        }
+     }   
+     
+    public void delete(Users user) throws Exception{
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        
+        try{
+          trans.begin();
+          em.remove(em.merge(user));
+          trans.commit();
+        }catch(Exception ex){
+          trans.rollback();
+        }
+        finally{
+            em.close(); 
+        } 
+    }
      
 }

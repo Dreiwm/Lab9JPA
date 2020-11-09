@@ -5,6 +5,7 @@
  */
 package services;
 
+import dataaccess.NotesDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,28 +24,12 @@ public class UserService
 
     public int update(String username, String password, String firstname, String lastname, String email) throws Exception {
         int rowUpdated = 0;
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
+        NotesDB ndb = new NotesDB();
+        Users user = new Users(username, password, firstname, lastname, email);        
         
-        String preparedSQL = "UPDATE users SET "
-                            + "   username = ?," 
-                            + "   password = ?," 
-                            + "   firstname = ?, "
-                            + "   lastname = ?,"
-                            + "   email = ?"
-                            + "WHERE username = ?";
+        ndb.update(user);
+        rowUpdated++;
         
-        PreparedStatement ps = connection.prepareStatement(preparedSQL);
-        
-        ps.setString(1, username);
-        ps.setString(2, password);
-        ps.setString(3, firstname);
-        ps.setString(4, lastname);
-        ps.setString(5, email);
-        ps.setString(6, username);
-        
-        rowUpdated = ps.executeUpdate();
-
         return rowUpdated;
     }
    
