@@ -5,6 +5,7 @@
  */
 package dataaccess;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import models.Users;
 
@@ -24,4 +25,20 @@ public class NotesDB {
          }
          
      }
+     
+     public List<Users> getAll() throws Exception{
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        
+        try{
+             List<Users> user = em.createNamedQuery("Users.findAll",Users.class).getResultList();
+             return user;
+         }finally{
+             em.close();
+         }
+     }
+     
+     public void insert(Users user )throws Exception{
+         
+     }
+     
 }

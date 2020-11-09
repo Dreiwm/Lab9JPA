@@ -5,7 +5,6 @@
  */
 package services;
 
-import dataaccess.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
