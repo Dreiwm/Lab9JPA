@@ -69,11 +69,12 @@ public class NotesDB {
         }
      }   
      
-    public void delete(Users user) throws Exception{
+    public void delete(String username) throws Exception{
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         
         try{
+          Users user = em.find(Users.class, username);
           trans.begin();
           em.remove(em.merge(user));
           trans.commit();

@@ -36,82 +36,38 @@ public class UserService
         
        public Users get(String username) throws Exception {
         
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
-        
-        
-        String preparedSQL ="SELECT * " 
-                   + "FROM users WHERE username = ?";
-
-        
-        PreparedStatement ps = connection.prepareStatement(preparedSQL);
-        
-        ps.setString(1, username);
-        
-        ResultSet p1 = ps.executeQuery();
-
-          Users u1 = new Users(p1.getString("username"),p1.getString("password"),
-                  p1.getString("firstname"), p1.getString("lastname"),p1.getString("email"));
-          
-          connection.close();
-
-        return u1;
+       NotesDB ndb = new NotesDB();
+       Users u1 = ndb.get(username);
+       return u1;
      }
     
     public List getAll() throws Exception{
         List<Users> allUsers = new ArrayList();
+        NotesDB ndb = new NotesDB();
+        allUsers = ndb.getAll();
         
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
-        Statement ps = connection.createStatement();
-        ResultSet userList = ps.executeQuery("SELECT * FROM users");
-        while(userList.next()){
-            allUsers.add(new Users(userList.getString("username"),userList.getString("password"),
-                    userList.getString("firstname"),userList.getString("lastname"),userList.getString("email")));
-        }
-        pool.freeConnection(connection);
-        userList.close();
         return allUsers;
     }
           
     public int insert(String username, String firstname, String lastname, String password, String email) throws Exception
-    {
-       ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
+    {   
+        int rows=0;
+        NotesDB ndb = new NotesDB();
+        Users user = new Users(username, password, firstname, lastname, email);
+        ndb.insert(user);
+        rows++;
         
-    String preparedQuery =
-        "INSERT INTO users "
-    + "(username, password, firstname, lastname,email) "
-    + "VALUES "
-    + "(?, ?, ?, ?, ?)";
-    PreparedStatement ps = connection.prepareStatement(preparedQuery);
-    ps.setString(1, username);
-    ps.setString(2, password);
-    ps.setString(3, firstname);
-    ps.setString(4, lastname);
-    ps.setString(5, email);
-    int rows = ps.executeUpdate(); 
-    pool.freeConnection(connection);
         return rows;
     }
     
         
     public int delete(String username) throws Exception{
-        //get connection
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
+        int rows = 0;
+        NotesDB ndb = new NotesDB();
         
-        //prepare Delete statement
-        String deleteQuery = "DELETE FROM users "
-                + "WHERE username = ?";
-        PreparedStatement delete = connection.prepareStatement(deleteQuery);
+        ndb.delete(username);
+        rows++;
         
-        //set the value and excute
-        delete.setString(0, username);
-        int rows = delete.executeUpdate();
-        
-        //release the connection and retrun the number of rows
-        pool.freeConnection(connection);
         return rows;
     }  
     
